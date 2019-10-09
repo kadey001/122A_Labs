@@ -14,7 +14,6 @@ Discarded input sections
  .text          0x00000000        0x0 main.o
  .data          0x00000000        0x0 main.o
  .bss           0x00000000        0x0 main.o
- .text.TimerOn  0x00000000       0x48 main.o
  .text.TimerOff
                 0x00000000        0x6 main.o
  .text.TimerISR
@@ -192,7 +191,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0x1be
+.text           0x00000000      0x232
  *(.vectors)
  .vectors       0x00000000       0x8c D:/Atmel/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega1284/avr51/crtatmega1284.o
                 0x00000000                __vector_default
@@ -290,16 +289,18 @@ END GROUP
  .text.TimerSet
                 0x000000c8       0x22 main.o
                 0x000000c8                TimerSet
+ .text.TimerOn  0x000000ea       0x48 main.o
+                0x000000ea                TimerOn
  .text.__vector_13
-                0x000000ea       0x78 main.o
-                0x000000ea                __vector_13
- .text.main     0x00000162       0x58 main.o
-                0x00000162                main
-                0x000001ba                . = ALIGN (0x2)
+                0x00000132       0x78 main.o
+                0x00000132                __vector_13
+ .text.main     0x000001aa       0x84 main.o
+                0x000001aa                main
+                0x0000022e                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x000001ba        0x0 d:/atmel/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr51\libgcc.a(_exit.o)
-                0x000001ba                _exit
-                0x000001ba                exit
+ .fini9         0x0000022e        0x0 d:/atmel/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr51\libgcc.a(_exit.o)
+                0x0000022e                _exit
+                0x0000022e                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -318,11 +319,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x000001ba        0x4 d:/atmel/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr51\libgcc.a(_exit.o)
+ .fini0         0x0000022e        0x4 d:/atmel/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr51\libgcc.a(_exit.o)
  *(.fini0)
-                0x000001be                _etext = .
+                0x00000232                _etext = .
 
-.data           0x00800100        0x4 load address 0x000001be
+.data           0x00800100        0x4 load address 0x00000232
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
@@ -349,8 +350,8 @@ END GROUP
                 0x00800108                TimerFlag
  *(COMMON)
                 0x00800109                PROVIDE (__bss_end, .)
-                0x000001be                __data_load_start = LOADADDR (.data)
-                0x000001c2                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x00000232                __data_load_start = LOADADDR (.data)
+                0x00000236                __data_load_end = (__data_load_start + SIZEOF (.data))
 
 .noinit         0x00800109        0x0
                 [!provide]                PROVIDE (__noinit_start, .)
@@ -429,34 +430,34 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000      0x95d
+.debug_info     0x00000000      0x996
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0x792 D:/Atmel/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega1284/avr51/crtatmega1284.o
- .debug_info    0x00000792      0x1cb main.o
+ .debug_info    0x00000792      0x204 main.o
 
-.debug_abbrev   0x00000000      0x846
+.debug_abbrev   0x00000000      0x853
  *(.debug_abbrev)
  .debug_abbrev  0x00000000      0x729 D:/Atmel/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega1284/avr51/crtatmega1284.o
- .debug_abbrev  0x00000729      0x11d main.o
+ .debug_abbrev  0x00000729      0x12a main.o
 
-.debug_line     0x00000000      0x334
+.debug_line     0x00000000      0x370
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x169 D:/Atmel/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega1284/avr51/crtatmega1284.o
- .debug_line    0x00000169      0x1cb main.o
+ .debug_line    0x00000169      0x207 main.o
 
 .debug_frame    0x00000000       0x94
  *(.debug_frame)
  .debug_frame   0x00000000       0x94 main.o
 
-.debug_str      0x00000000      0x458
+.debug_str      0x00000000      0x47b
  *(.debug_str)
  .debug_str     0x00000000      0x296 D:/Atmel/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega1284/avr51/crtatmega1284.o
- .debug_str     0x00000296      0x1c2 main.o
-                                0x1f6 (size before relaxing)
+ .debug_str     0x00000296      0x1e5 main.o
+                                0x219 (size before relaxing)
 
-.debug_loc      0x00000000      0x138
+.debug_loc      0x00000000      0x195
  *(.debug_loc)
- .debug_loc     0x00000000      0x138 main.o
+ .debug_loc     0x00000000      0x195 main.o
 
 .debug_macinfo
  *(.debug_macinfo)
