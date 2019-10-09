@@ -396,7 +396,7 @@ END GROUP
  *(.fini0)
                 0x00000924                _etext = .
 
-.data           0x00800100        0xa load address 0x00000924
+.data           0x00800100        0x8 load address 0x00000924
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
@@ -407,33 +407,33 @@ END GROUP
  *(.rodata)
  *(.rodata*)
  .rodata.str1.1
-                0x00800104        0x5 main.o
+                0x00800104        0x3 main.o
  *(.gnu.linkonce.r*)
-                0x0080010a                . = ALIGN (0x2)
- *fill*         0x00800109        0x1 
-                0x0080010a                _edata = .
-                0x0080010a                PROVIDE (__data_end, .)
+                0x00800108                . = ALIGN (0x2)
+ *fill*         0x00800107        0x1 
+                0x00800108                _edata = .
+                0x00800108                PROVIDE (__data_end, .)
 
-.bss            0x0080010a        0x5
-                0x0080010a                PROVIDE (__bss_start, .)
+.bss            0x00800108        0x5
+                0x00800108                PROVIDE (__bss_start, .)
  *(.bss)
  *(.bss*)
  .bss._avr_timer_cntcurr
-                0x0080010a        0x4 main.o
-                0x0080010a                _avr_timer_cntcurr
+                0x00800108        0x4 main.o
+                0x00800108                _avr_timer_cntcurr
  .bss.TimerFlag
-                0x0080010e        0x1 main.o
-                0x0080010e                TimerFlag
+                0x0080010c        0x1 main.o
+                0x0080010c                TimerFlag
  *(COMMON)
-                0x0080010f                PROVIDE (__bss_end, .)
+                0x0080010d                PROVIDE (__bss_end, .)
                 0x00000924                __data_load_start = LOADADDR (.data)
-                0x0000092e                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x0000092c                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x0080010f        0x0
+.noinit         0x0080010d        0x0
                 [!provide]                PROVIDE (__noinit_start, .)
  *(.noinit*)
                 [!provide]                PROVIDE (__noinit_end, .)
-                0x0080010f                _end = .
+                0x0080010d                _end = .
                 [!provide]                PROVIDE (__heap_start, .)
 
 .eeprom         0x00810000        0x0
@@ -513,11 +513,11 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000      0xd4b
+.debug_info     0x00000000      0xd48
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0x792 D:/Atmel/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega1284/avr51/crtatmega1284.o
  .debug_info    0x00000792      0x2c2 io.o
- .debug_info    0x00000a54      0x2f7 main.o
+ .debug_info    0x00000a54      0x2f4 main.o
 
 .debug_abbrev   0x00000000      0x99b
  *(.debug_abbrev)

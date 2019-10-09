@@ -1,8 +1,8 @@
 /*	Author: Kelton
  *  Partner(s) Name: Andrew Lee
  *	Lab Section: 22
- *	Assignment: Lab #1  Exercise #1
- *	Exercise Description: [optional - include for your own benefit]
+ *	Assignment: Lab #1  Exercise #2
+ *	Exercise Description: When middle button is pressed score is incremented but hit any other time goes down to lowest of 0.
  *
  *	I acknowledge all content contained herein, excluding template or example
  *	code, is my own original work.
@@ -27,7 +27,7 @@ int main(void) {
 	
 	LCD_init();
 	LCD_ClearScreen();
-	LCD_DisplayString(1, "0");
+	LCD_DisplayString(1, '0');
 	
 	uc output = 0x00;
 	uc mainSequence = 0x01;
@@ -50,10 +50,10 @@ int main(void) {
 			if(buttonC1) {
 				if(output == 0x02 || output == 0x0A) {
 					score++;
-					} else {
+				} else {
 					if(score > 0) {
 						score--;
-						} else {
+					} else {
 						//Nothing
 					}
 				}
@@ -85,8 +85,8 @@ int main(void) {
 			output |= flashingLED;
 			pausedSequence = output;
 			PORTB = output;
-			} else {
-				PORTB = pausedSequence;
+		} else {
+			PORTB = pausedSequence;
 		}
 		
 		while(!TimerFlag);

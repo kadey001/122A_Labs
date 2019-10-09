@@ -19,24 +19,36 @@ void transmitUSART(unsigned char targetUSART, unsigned char data);
 //Leader Micro Controller Code
 int main(void){
 	DDRA = 0xFF; PORTA = 0x00;//A OUTPUT
+	DDRC = 0x00; PORTC = 0xFF;//C INPUT
 	DDRD = 0xFF; PORTD = 0x00;//D OUTPUT
 
-	initUSART(0);//Initialize USART 0
-	initUSART(1);//Initialize USART 1
+	initUSART(0);//Initialize USART 0 RECIEVING
+	initUSART(1);//Initialize USART 1 SENDING
 
-	TimerSet(1000);//1 second timer
+	unsigned long timeInterval = 1000;//1000 ms
+	TimerSet(timeInterval);//1 second timer
 	TimerOn();//Start timer
 
 	uc localLED = 0;
 	uc targetUSART = 0;
+	uc modeSwitch = 0;
 	while(1){
-		PORTA = localLED;//Set local LED On/Off
+		modeSwitch = ~PINC & 0x0C;//Gets state of the switch  0x08 is Leader and 0x04 is Follower
+		
+		if(modeSwitch == 0x08) {//Leader
+			PORTC = 0x01;//Leader LED enabled
+			targetUSART = 1;
+			if(USART_IsSendReady(targetUSART)){//Checks if USART is ready for to transmit
+				transmitUSART(targetUSART, localLED);//Transmit data
+			}
+			PORTA = localLED;//Set local LED On/Off after data is transmitted
 
-		if(USART_IsSendReady(targetUSART)){//Checks if USART is ready for to transmit
-			transmitUSART(targetUSART, localLED);//Transmit data
+			localLED = (localLED == 0) ? 1 : 0;//Flip LED On/Off
+		} else {//Follower
+			PORTC = 0x00;//Leader LED disabled
+			//Follower Code
 		}
-
-		localLED = (localLED == 0) ? 1 : 0;//Flip LED On/Off
+		
 		while(!TimerFlag);//Wait 1 second
 		TimerFlag = 0;
 	}

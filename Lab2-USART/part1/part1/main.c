@@ -21,21 +21,22 @@ int main(void){
 	DDRD = 0xFF; PORTD = 0x00;//D OUTPUT
 
     initUSART(0);//Initialize USART 0
-    initUSART(1);//Initialize USART 1
-
-	TimerSet(1000);//1 second timer
+    //initUSART(1);//Initialize USART 1
+	
+	unsigned long timeInterval = 1000;//1000 ms
+	TimerSet(timeInterval);//1 second timer
 	TimerOn();//Start timer
 
 	uc localLED = 0;
 	uc targetUSART = 0;
 	while(1){
-		PORTA = localLED;//Set local LED On/Off
-
 		if(USART_IsSendReady(targetUSART)){//Checks if USART is ready for to transmit
 			transmitUSART(targetUSART, localLED);//Transmit data
 		}
+		PORTA = localLED;//Set local LED On/Off after data is transmitted
 
 		localLED = (localLED == 0) ? 1 : 0;//Flip LED On/Off
+		
 		while(!TimerFlag);//Wait 1 second
 		TimerFlag = 0;
 	}
