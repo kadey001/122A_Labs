@@ -66,4 +66,3 @@ void transmitUSART(unsigned char targetUSART, unsigned char data){
 	USART_Flush(targetUSART);//Flushing data registers
 	return;
 }
-
