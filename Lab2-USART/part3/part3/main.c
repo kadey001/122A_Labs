@@ -31,38 +31,43 @@ int main(void){
 	uc localLED = 0;
 	uc receivingUSART = 0;
 	uc sendingUSART = 1;
-	uc mode = 1;//1 = Leader | 0 = Follower
+	unsigned long usartMode = 0;//1 = Leader | 0 = Follower
 	uc followerTick = 0;
+	uc hasReceived = 0;
 	
 	while(1){
-		if(mode == 1) {//Leader
+		if(usartMode == 1) {//Leader
+			TimerSet(1000);
 			PORTB = 0x01;//Leader LED enabled
 			
 			if(USART_IsSendReady(sendingUSART)){//Checks if USART is ready for to transmit
 				USART_Send(localLED, sendingUSART);//Transmit data
-				//USART_Flush(sendingUSART);
 			}
 			PORTA = localLED;//Set local LED On/Off after data is transmitted
 			localLED = (localLED == 0) ? 1 : 0;//Flip LED On/Off
 
 			if(USART_HasReceived(receivingUSART)) {
-				mode = 0;//Switch to follower
+				usartMode = 0;//Switch to follower
 			}
 		}
 		else {//Follower
+			TimerSet(50);
 			PORTB = 0x00;//Leader LED disabled
 			
 			if(USART_HasReceived(receivingUSART)){//Checks if USART has received data
+				hasReceived = 1;
 				localLED = USART_Receive(receivingUSART); //store received data
-				//USART_Flush(receivingUSART);
 			}
 			PORTA = localLED;//Set local LED On/Off after data is transmitted
 
-			if(followerTick == 5) {//If 3 seconds without any data
-				mode = 1;//Switch to Leader
+			if(followerTick == 60) {//If 3 seconds without any data
+				usartMode = 1;//Switch to Leader
 				followerTick = 0;
-			} else {
-				if(USART_HasReceived(1)) {//Checks if data has been received, if it has then ticker is reset, if not then ticker is incremented.
+			} 
+			else {
+				//followerTick++;
+				if(hasReceived) {//Checks if data has been received, if it has then ticker is reset, if not then ticker is incremented.
+					hasReceived = 0;
 					followerTick = 0;
 				} else {
 					followerTick++;

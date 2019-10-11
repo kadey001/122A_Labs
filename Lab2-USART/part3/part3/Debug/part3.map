@@ -199,7 +199,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x00000000      0x2e0
+.text           0x00000000      0x31a
  *(.vectors)
  .vectors       0x00000000       0x8c D:/Atmel/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega1284/avr51/crtatmega1284.o
                 0x00000000                __vector_default
@@ -311,13 +311,13 @@ END GROUP
  .text.__vector_13
                 0x000001be       0x78 main.o
                 0x000001be                __vector_13
- .text.main     0x00000236       0xa6 main.o
+ .text.main     0x00000236       0xe0 main.o
                 0x00000236                main
-                0x000002dc                . = ALIGN (0x2)
+                0x00000316                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x000002dc        0x0 d:/atmel/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr51\libgcc.a(_exit.o)
-                0x000002dc                _exit
-                0x000002dc                exit
+ .fini9         0x00000316        0x0 d:/atmel/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr51\libgcc.a(_exit.o)
+                0x00000316                _exit
+                0x00000316                exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -336,11 +336,11 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x000002dc        0x4 d:/atmel/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr51\libgcc.a(_exit.o)
+ .fini0         0x00000316        0x4 d:/atmel/7.0/toolchain/avr8/avr8-gnu-toolchain/bin/../lib/gcc/avr/5.4.0/avr51\libgcc.a(_exit.o)
  *(.fini0)
-                0x000002e0                _etext = .
+                0x0000031a                _etext = .
 
-.data           0x00800100        0x4 load address 0x000002e0
+.data           0x00800100        0x4 load address 0x0000031a
                 0x00800100                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
@@ -367,8 +367,8 @@ END GROUP
                 0x00800108                TimerFlag
  *(COMMON)
                 0x00800109                PROVIDE (__bss_end, .)
-                0x000002e0                __data_load_start = LOADADDR (.data)
-                0x000002e4                __data_load_end = (__data_load_start + SIZEOF (.data))
+                0x0000031a                __data_load_start = LOADADDR (.data)
+                0x0000031e                __data_load_end = (__data_load_start + SIZEOF (.data))
 
 .noinit         0x00800109        0x0
                 [!provide]                PROVIDE (__noinit_start, .)
@@ -447,34 +447,34 @@ END GROUP
 .debug_pubnames
  *(.debug_pubnames)
 
-.debug_info     0x00000000      0xba4
+.debug_info     0x00000000      0xbd6
  *(.debug_info .gnu.linkonce.wi.*)
  .debug_info    0x00000000      0x792 D:/Atmel/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega1284/avr51/crtatmega1284.o
- .debug_info    0x00000792      0x412 main.o
+ .debug_info    0x00000792      0x444 main.o
 
 .debug_abbrev   0x00000000      0x915
  *(.debug_abbrev)
  .debug_abbrev  0x00000000      0x729 D:/Atmel/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega1284/avr51/crtatmega1284.o
  .debug_abbrev  0x00000729      0x1ec main.o
 
-.debug_line     0x00000000      0x548
+.debug_line     0x00000000      0x55e
  *(.debug_line .debug_line.* .debug_line_end)
  .debug_line    0x00000000      0x169 D:/Atmel/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega1284/avr51/crtatmega1284.o
- .debug_line    0x00000169      0x3df main.o
+ .debug_line    0x00000169      0x3f5 main.o
 
 .debug_frame    0x00000000      0x104
  *(.debug_frame)
  .debug_frame   0x00000000      0x104 main.o
 
-.debug_str      0x00000000      0x4dc
+.debug_str      0x00000000      0x4ed
  *(.debug_str)
  .debug_str     0x00000000      0x296 D:/Atmel/7.0/Packs/atmel/ATmega_DFP/1.2.209/gcc/dev/atmega1284/avr51/crtatmega1284.o
- .debug_str     0x00000296      0x246 main.o
-                                0x27a (size before relaxing)
+ .debug_str     0x00000296      0x257 main.o
+                                0x28b (size before relaxing)
 
-.debug_loc      0x00000000      0x2a4
+.debug_loc      0x00000000      0x2e6
  *(.debug_loc)
- .debug_loc     0x00000000      0x2a4 main.o
+ .debug_loc     0x00000000      0x2e6 main.o
 
 .debug_macinfo
  *(.debug_macinfo)
@@ -494,9 +494,9 @@ END GROUP
 .debug_pubtypes
  *(.debug_pubtypes)
 
-.debug_ranges   0x00000000       0xa0
+.debug_ranges   0x00000000       0x88
  *(.debug_ranges)
- .debug_ranges  0x00000000       0xa0 main.o
+ .debug_ranges  0x00000000       0x88 main.o
 
 .debug_macro
  *(.debug_macro)
