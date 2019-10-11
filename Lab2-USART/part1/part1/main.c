@@ -23,7 +23,7 @@ int main(void){
     initUSART(0);//Initialize USART 0
     //initUSART(1);//Initialize USART 1
 	
-	unsigned long timeInterval = 1000;//1000 ms
+	unsigned long timeInterval = 100;//1000 ms
 	TimerSet(timeInterval);//1 second timer
 	TimerOn();//Start timer
 
@@ -45,7 +45,6 @@ int main(void){
 
 void transmitUSART(unsigned char targetUSART, unsigned char data){
 	USART_Send(data, targetUSART);//Send data
-	while(!USART_HasTransmitted(targetUSART));//Wait for transmission to complete
-	USART_Flush(targetUSART);//Flushing data registers
+	//USART_Flush(targetUSART);//Flushing data registers
 	return;
 }

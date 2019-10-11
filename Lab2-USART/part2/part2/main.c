@@ -14,11 +14,10 @@
 
 #define uc unsigned char
 
-void transmitUSART(unsigned char targetUSART, unsigned char data);
-
 //Leader Micro Controller Code
 int main(void){
 	DDRA = 0xFF; PORTA = 0x00;//A OUTPUT
+	DDRB = 0xFF; PORTB = 0x00;//B Output
 	DDRC = 0x00; PORTC = 0xFF;//C INPUT
 	DDRD = 0xFF; PORTD = 0x00;//D OUTPUT
 
@@ -35,35 +34,28 @@ int main(void){
 	uc modeSwitch = 0;
 	
 	while(1){
-		modeSwitch = ~PINC & 0x0C;//Gets state of the switch  0x08 is Leader and 0x04 is Follower
+		modeSwitch = ~PINC & 0x01;//Gets state of the switch  0x08 is Leader and 0x04 is Follower
 		
-		if(modeSwitch == 0x08) {//Leader
-			PORTC = 0x01;//Leader LED enabled
-			targetUSART = 1;
-			if(USART_IsSendReady(targetUSART)){//Checks if USART is ready for to transmit
-				transmitUSART(targetUSART, localLED);//Transmit data
+		if(modeSwitch == 0x01) {//Leader
+			PORTB = 0x01;//Leader LED enabled
+			
+			if(USART_IsSendReady(1)){//Checks if USART is ready for to transmit
+				USART_Send(localLED, 1);//Transmit Data
 			}
 			PORTA = localLED;//Set local LED On/Off after data is transmitted
-
 			localLED = (localLED == 0) ? 1 : 0;//Flip LED On/Off
-		} else {//Follower
-			PORTC = 0x00;//Leader LED disabled
-			receivingUSART = 0;
-			if(USART_HasReceived(receivingUSART)){//Checks if USART has received data
-				localLED = USART_Receive(receivingUSART); //store received data
-			}
 		}
-		
+		else {//Follower
+			PORTB = 0x00;//Leader LED disabled
+			
+			if(USART_HasReceived(1)){//Checks if USART has received data
+				localLED = USART_Receive(1); //store received data
+				USART_Flush(0);
+			}
+			PORTA = localLED;//Set local LED On/Off after data is transmitted
+		}
 		while(!TimerFlag);//Wait 1 second
 		TimerFlag = 0;
 	}
 	return 1;
 }
-
-void transmitUSART(unsigned char targetUSART, unsigned char data){
-	USART_Send(data, targetUSART);//Send data
-	while(!USART_HasTransmitted(targetUSART));//Wait for transmission to complete
-	USART_Flush(targetUSART);//Flushing data registers
-	return;
-}
-
