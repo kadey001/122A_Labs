@@ -72,12 +72,12 @@ unsigned char USART_HasReceived(unsigned char usartNum)
 //Returns: None
 void USART_Flush(unsigned char usartNum)
 {
-	static unsigned char dummy;
+	//static unsigned char dummy;
 	if (usartNum != 1) {
-		while ( UCSR0A & (1 << RXC0) ) { dummy = UDR0; }
+		while ( UCSR0A & (1 << RXC0) ) {}//{ dummy = UDR0; }
 	}
 	else {
-		while ( UCSR1A & (1 << RXC1) ) { dummy = UDR1; }
+		while ( UCSR1A & (1 << RXC1) ) {}//{ dummy = UDR1; }
 	}
 }
 ////////////////////////////////////////////////////////////////////////////////
@@ -114,4 +114,4 @@ unsigned char USART_Receive(unsigned char usartNum)
 	}
 }
 
-#endif USART_1284_H
+#endif //USART_1284_H

@@ -40,7 +40,7 @@ int main(void){
 			
 			if(USART_IsSendReady(sendingUSART)){//Checks if USART is ready for to transmit
 				USART_Send(localLED, sendingUSART);//Transmit data
-				USART_Flush(sendingUSART);
+				//USART_Flush(sendingUSART);
 			}
 			PORTA = localLED;//Set local LED On/Off after data is transmitted
 			localLED = (localLED == 0) ? 1 : 0;//Flip LED On/Off
@@ -54,11 +54,11 @@ int main(void){
 			
 			if(USART_HasReceived(receivingUSART)){//Checks if USART has received data
 				localLED = USART_Receive(receivingUSART); //store received data
-				USART_Flush(receivingUSART);
+				//USART_Flush(receivingUSART);
 			}
 			PORTA = localLED;//Set local LED On/Off after data is transmitted
 
-			if(followerTick == 3) {//If 3 seconds without any data
+			if(followerTick == 5) {//If 3 seconds without any data
 				mode = 1;//Switch to Leader
 				followerTick = 0;
 			} else {
