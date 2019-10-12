@@ -31,7 +31,7 @@ int main(void){
 	uc localLED = 0;
 	uc receivingUSART = 0;
 	uc sendingUSART = 1;
-	uc mode = 1;//1 = Leader | 0 = Follower
+	uc mode = 0;//1 = Leader | 0 = Follower
 	uc followerTick = 0;
 	
 	while(1){

@@ -13,38 +13,66 @@
 
 #define uc unsigned char
 
-void transmitUSART(unsigned char targetUSART, unsigned char data);
-
 //Leader Micro Controller Code
 int main(void){
 	DDRA = 0xFF; PORTA = 0x00;//A OUTPUT
+	DDRB = 0xFF; PORTB = 0x00;//B Output
+	DDRC = 0x00; PORTC = 0xFF;//C INPUT
 	DDRD = 0xFF; PORTD = 0x00;//D OUTPUT
 
-    initUSART(0);//Initialize USART 0
-    initUSART(1);//Initialize USART 1
+	initUSART(0);//Initialize USART 0 RECIEVING
+	initUSART(1);//Initialize USART 1 SENDING
 
-	TimerSet(1000);//1 second timer
+	unsigned long timeInterval = 1000;//1000 ms
+	TimerSet(timeInterval);//1 second timer
 	TimerOn();//Start timer
 
 	uc localLED = 0;
-	uc targetUSART = 0;
+	uc receivingUSART = 0;
+	uc sendingUSART = 1;
+	uc mode = 0;//1 = Leader | 0 = Follower
+	uc followerTick = 0;
+	
 	while(1){
-		PORTA = localLED;//Set local LED On/Off
+		if(mode == 1) {//Leader
+			PORTB = 0x01;//Leader LED enabled
+			
+			if(USART_IsSendReady(sendingUSART)){//Checks if USART is ready for to transmit
+				USART_Send(localLED, sendingUSART);//Transmit data
+				USART_Flush(sendingUSART);
+			}
+			PORTA = localLED;//Set local LED On/Off after data is transmitted
+			localLED = (localLED == 0) ? 1 : 0;//Flip LED On/Off
 
-		if(USART_IsSendReady(targetUSART)){//Checks if USART is ready for to transmit
-			transmitUSART(targetUSART, localLED);//Transmit data
+			if(USART_HasReceived(receivingUSART)) {
+				mode = 0;//Switch to follower
+			}
 		}
+		else {//Follower
+			PORTB = 0x00;//Leader LED disabled
+			
+			if(USART_HasReceived(receivingUSART)){//Checks if USART has received data
+				localLED = USART_Receive(receivingUSART); //store received data
+				USART_Flush(receivingUSART);
+			}
+			PORTA = localLED;//Set local LED On/Off after data is transmitted
+			if(USART_IsSendReady(receivingUSART)) {//Send data on same usart to daisychained microcrontrollers
+				USART_Send(localLED, receivingUSART);
+			}
 
-		localLED = (localLED == 0) ? 1 : 0;//Flip LED On/Off
+			if(followerTick == 3) {//If 3 seconds without any data
+				mode = 1;//Switch to Leader
+				followerTick = 0;
+			} else {
+				if(USART_HasReceived(1)) {//Checks if data has been received, if it has then ticker is reset, if not then ticker is incremented.
+					followerTick = 0;
+				} else {
+					followerTick++;
+				}
+			}
+		}
 		while(!TimerFlag);//Wait 1 second
 		TimerFlag = 0;
 	}
 	return 1;
-}
-
-void transmitUSART(unsigned char targetUSART, unsigned char data){
-	USART_Send(data, targetUSART);//Send data
-	while(!USART_HasTransmitted(targetUSART));//Wait for transmission to complete
-	USART_Flush(targetUSART);//Flushing data registers
-	return;
 }
