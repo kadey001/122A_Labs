@@ -29,7 +29,7 @@ int main(void){
 	TimerOn();//Start timer
 
 	uc localLED = 0;
-	uc targetUSART = 0;
+	uc sendingUSART = 1;
 	uc receivingUSART = 0;
 	uc modeSwitch = 0;
 	
@@ -39,23 +39,23 @@ int main(void){
 		if(modeSwitch == 0x01) {//Leader
 			PORTB = 0x01;//Leader LED enabled
 			
-			if(USART_IsSendReady(1)){//Checks if USART is ready for to transmit
-				USART_Send(localLED, 1);//Transmit Data
+			if(USART_IsSendReady(sendingUSART)){//Checks if USART is ready for to transmit
+				USART_Send(localLED, sendingUSART);//Transmit Data
 			}
 			PORTA = localLED;//Set local LED On/Off after data is transmitted
 			localLED = (localLED == 0) ? 1 : 0;//Flip LED On/Off
+			while(!TimerFlag);//Wait 1 second
+			TimerFlag = 0;
 		}
 		else {//Follower
 			PORTB = 0x00;//Leader LED disabled
 			
-			if(USART_HasReceived(1)){//Checks if USART has received data
-				localLED = USART_Receive(1); //store received data
-				USART_Flush(0);
+			if(USART_HasReceived(receivingUSART)){//Checks if USART has received data
+				localLED = USART_Receive(receivingUSART); //store received data
 			}
 			PORTA = localLED;//Set local LED On/Off after data is transmitted
 		}
-		while(!TimerFlag);//Wait 1 second
-		TimerFlag = 0;
+		
 	}
 	return 1;
 }
