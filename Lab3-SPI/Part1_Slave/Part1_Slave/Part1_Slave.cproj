@@ -12,9 +12,9 @@
     <OutputFileName>$(MSBuildProjectName)</OutputFileName>
     <OutputFileExtension>.elf</OutputFileExtension>
     <OutputDirectory>$(MSBuildProjectDirectory)\$(Configuration)</OutputDirectory>
-    <AssemblyName>Part1</AssemblyName>
-    <Name>Part1</Name>
-    <RootNamespace>Part1</RootNamespace>
+    <AssemblyName>Part1_Slave</AssemblyName>
+    <Name>Part1_Slave</Name>
+    <RootNamespace>Part1_Slave</RootNamespace>
     <ToolchainFlavour>Native</ToolchainFlavour>
     <KeepTimersRunning>true</KeepTimersRunning>
     <OverrideVtor>false</OverrideVtor>
@@ -122,15 +122,6 @@
     </ToolchainSettings>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="bit.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="keypad.h">
-      <SubType>compile</SubType>
-    </Compile>
-    <Compile Include="lcd.h">
-      <SubType>compile</SubType>
-    </Compile>
     <Compile Include="main.c">
       <SubType>compile</SubType>
     </Compile>

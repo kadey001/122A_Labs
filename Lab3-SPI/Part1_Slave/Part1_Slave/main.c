@@ -1,7 +1,7 @@
 /*
- * Part1.c
+ * Part1_Slave.c
  *
- * Created: 10/11/2019 7:06:41 PM
+ * Created: 10/11/2019 7:14:31 PM
  * Author : Owner
  */ 
 
@@ -13,7 +13,6 @@ int main(void)
     /* Replace with your application code */
     while (1) 
     {
-		
     }
 }
 
