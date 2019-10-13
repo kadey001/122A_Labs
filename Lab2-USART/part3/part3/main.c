@@ -34,7 +34,7 @@ int main(void){
 <<<<<<< HEAD
 	uc mode = 0;//1 = Leader | 0 = Follower
 =======
-	unsigned long usartMode = 0;//1 = Leader | 0 = Follower
+	uc usartMode = 0;//1 = Leader | 0 = Follower
 >>>>>>> 2eefe4420958c9dffbb5897152054d8ed630d1c7
 	uc followerTick = 0;
 	uc hasReceived = 0;
