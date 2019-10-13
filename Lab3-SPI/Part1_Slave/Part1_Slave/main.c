@@ -12,11 +12,17 @@ char SPI_ServantReceive(void);
 
 int main(void)
 {
+<<<<<<< HEAD
     SPI_ServantInit();
     
     while (1) 
     {
 
+=======
+    while (1) 
+    {
+		
+>>>>>>> 35e4c43a3e05c339e138c9f3444a28de006c95bf
     }
 }
 
