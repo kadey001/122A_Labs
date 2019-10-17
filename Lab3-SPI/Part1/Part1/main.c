@@ -6,12 +6,17 @@
  */ 
 
 #include <avr/io.h>
-
+#include "timer.h"
 
 unsigned char LEDValue;
 
+void SPI_MasterInit(void);
+void SPI_MasterTransmit(char cData);
+
 int main(void)
 {
+	TimerSet(1000);
+	TimerOn();
 	LEDValue = 0;
 	SPI_MasterInit();
     while (1) 
@@ -19,6 +24,8 @@ int main(void)
 		SPI_MasterTransmit(LEDValue);
 		
 		LEDValue++; //will go back to zero if char overflows
+		while(!TimerFlag);
+		TimerFlag = 0;
     }
 }
 
@@ -29,7 +36,7 @@ void SPI_MasterInit(void) {
 	DDRB = 0x00; PORTD = 0xFF;
 	
 	SPCR =  (1 << SPE)|(1 << MSTR)|(1 << SPR0);
-	SREG = (1 << 7);
+	SREG |= (1 << 7);
 }
 
 void SPI_MasterTransmit(char cData) {

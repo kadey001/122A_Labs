@@ -19,7 +19,7 @@
 #ifndef KEYPAD_H
 #define KEYPAD_H
 
-#include <bit.h>
+//#include "bit.h"
 
 // Keypad Setup Values
 #define KEYPADPORT PORTC
@@ -32,6 +32,17 @@
 #define COL2 5
 #define COL3 6
 #define COL4 7
+
+
+unsigned char GetBit(unsigned char port, unsigned char number)
+{
+	return ( port & (0x01 << number) );
+}
+
+unsigned char SetBit(unsigned char pin, unsigned char number, unsigned char bin_value)
+{
+	return (bin_value ? pin | (0x01 << number) : pin & ~(0x01 << number));
+}
 
 ////////////////////////////////////////////////////////////////////////////////
 //Functionality - Gets input from a keypad via time-multiplexing
