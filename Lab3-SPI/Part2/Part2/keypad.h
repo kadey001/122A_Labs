@@ -19,7 +19,7 @@
 #ifndef KEYPAD_H
 #define KEYPAD_H
 
-#include <bit.h>
+#include "bit.h"
 
 // Keypad Setup Values
 #define KEYPADPORT PORTC
