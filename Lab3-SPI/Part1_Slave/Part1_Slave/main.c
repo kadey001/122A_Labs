@@ -12,11 +12,14 @@
 
 #define uc unsigned char
 
+uc receivedData;
+
 void SPI_ServantInit(void);
 char SPI_ServantReceive(void);
 
 int main(void)
 {
+	DDRA = 0xFF; PORTA = 0x00;
     SPI_ServantInit();
     
 	uc select;
@@ -25,17 +28,18 @@ int main(void)
     {
 		select = ~PINB & 0x10;//Get SS
 		if(!select) {//If the Select line is low then it is selected
-			ledPattern = SPI_ServantReceive();
-		
+			ledPattern = receivedData;
+		}
+		//ledPattern = SPI_ServantReceive();
         PORTA = ledPattern;
     }
 }
 
 void SPI_ServantInit(void) {
     /* Set MISO output, all others input */
-    DDRA = 0xFF; PORTA = 0x00;
-    DDRB = 0x40; PORTB = 0xBF;//B4=~SS | B5=MOSI | B6=MISO | B7=SCLK
-
+  /*  DDRB = 0x40;*/ PORTB = 0xBF;//B4=~SS | B5=MOSI | B6=MISO | B7=SCLK
+	
+	DDRB = (1 << DDB5);
     /* Enable SPI */
     SPCR = (1<<SPE);
 }
@@ -46,5 +50,9 @@ char SPI_ServantReceive(void)
     while(!(SPSR & (1<<SPIF)));
     /* Return Data Register */
     return SPDR;
+}
+
+ISR(SPI_STC_vect) {
+	receivedData = SPDR;
 }
 

@@ -3,31 +3,31 @@ Part1.elf:     file format elf32-avr
 
 Sections:
 Idx Name          Size      VMA       LMA       File off  Algn
-  0 .data         00000004  00800100  0000020c  000002a0  2**0
+  0 .data         00000004  00800100  00000206  0000029a  2**0
                   CONTENTS, ALLOC, LOAD, DATA
-  1 .text         0000020c  00000000  00000000  00000094  2**1
+  1 .text         00000206  00000000  00000000  00000094  2**1
                   CONTENTS, ALLOC, LOAD, READONLY, CODE
-  2 .bss          00000006  00800104  00800104  000002a4  2**0
+  2 .bss          00000006  00800104  00800104  0000029e  2**0
                   ALLOC
-  3 .comment      00000030  00000000  00000000  000002a4  2**0
+  3 .comment      00000030  00000000  00000000  0000029e  2**0
                   CONTENTS, READONLY
-  4 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  000002d4  2**2
+  4 .note.gnu.avr.deviceinfo 00000040  00000000  00000000  000002d0  2**2
                   CONTENTS, READONLY
-  5 .debug_aranges 00000058  00000000  00000000  00000314  2**0
+  5 .debug_aranges 00000058  00000000  00000000  00000310  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   00000997  00000000  00000000  0000036c  2**0
+  6 .debug_info   00000997  00000000  00000000  00000368  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 0000086b  00000000  00000000  00000d03  2**0
+  7 .debug_abbrev 0000086b  00000000  00000000  00000cff  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   00000359  00000000  00000000  0000156e  2**0
+  8 .debug_line   00000353  00000000  00000000  0000156a  2**0
                   CONTENTS, READONLY, DEBUGGING
-  9 .debug_frame  000000b4  00000000  00000000  000018c8  2**2
+  9 .debug_frame  000000b4  00000000  00000000  000018c0  2**2
                   CONTENTS, READONLY, DEBUGGING
- 10 .debug_str    0000046e  00000000  00000000  0000197c  2**0
+ 10 .debug_str    0000046e  00000000  00000000  00001974  2**0
                   CONTENTS, READONLY, DEBUGGING
- 11 .debug_loc    00000063  00000000  00000000  00001dea  2**0
+ 11 .debug_loc    00000063  00000000  00000000  00001de2  2**0
                   CONTENTS, READONLY, DEBUGGING
- 12 .debug_ranges 00000048  00000000  00000000  00001e4d  2**0
+ 12 .debug_ranges 00000048  00000000  00000000  00001e45  2**0
                   CONTENTS, READONLY, DEBUGGING
 
 Disassembly of section .text:
@@ -116,7 +116,7 @@ Disassembly of section .text:
   98:	11 e0       	ldi	r17, 0x01	; 1
   9a:	a0 e0       	ldi	r26, 0x00	; 0
   9c:	b1 e0       	ldi	r27, 0x01	; 1
-  9e:	ec e0       	ldi	r30, 0x0C	; 12
+  9e:	e6 e0       	ldi	r30, 0x06	; 6
   a0:	f2 e0       	ldi	r31, 0x02	; 2
   a2:	00 e0       	ldi	r16, 0x00	; 0
   a4:	0b bf       	out	0x3b, r16	; 59
@@ -140,8 +140,8 @@ Disassembly of section .text:
   bc:	aa 30       	cpi	r26, 0x0A	; 10
   be:	b2 07       	cpc	r27, r18
   c0:	e1 f7       	brne	.-8      	; 0xba <.do_clear_bss_loop>
-  c2:	8a d0       	rcall	.+276    	; 0x1d8 <main>
-  c4:	a1 c0       	rjmp	.+322    	; 0x208 <_exit>
+  c2:	82 d0       	rcall	.+260    	; 0x1c8 <main>
+  c4:	9e c0       	rjmp	.+316    	; 0x202 <_exit>
 
 000000c6 <__bad_interrupt>:
   c6:	9c cf       	rjmp	.-200    	; 0x0 <__vectors>
@@ -255,95 +255,88 @@ void TimerISR() {
  1a8:	18 95       	reti
 
 000001aa <SPI_MasterInit>:
-		TimerFlag = 0;
     }
 }
 
 void SPI_MasterInit(void) {
-	DDRA = 0xFF; PORTA = 0x00;
- 1aa:	8f ef       	ldi	r24, 0xFF	; 255
- 1ac:	81 b9       	out	0x01, r24	; 1
- 1ae:	12 b8       	out	0x02, r1	; 2
-	DDRB = 0xBF; PORTB = 0x40;
- 1b0:	9f eb       	ldi	r25, 0xBF	; 191
- 1b2:	94 b9       	out	0x04, r25	; 4
- 1b4:	90 e4       	ldi	r25, 0x40	; 64
- 1b6:	95 b9       	out	0x05, r25	; 5
-	DDRC = 0x00; PORTC = 0xFF;
- 1b8:	17 b8       	out	0x07, r1	; 7
- 1ba:	88 b9       	out	0x08, r24	; 8
-	DDRB = 0x00; PORTD = 0xFF;
- 1bc:	14 b8       	out	0x04, r1	; 4
- 1be:	8b b9       	out	0x0b, r24	; 11
 	
+	DDRB =  (1 << DDB5) | (1 << DDB7) | (1 << DDB4);
+ 1aa:	80 eb       	ldi	r24, 0xB0	; 176
+ 1ac:	84 b9       	out	0x04, r24	; 4
 	SPCR =  (1 << SPE)|(1 << MSTR)|(1 << SPR0);
- 1c0:	81 e5       	ldi	r24, 0x51	; 81
- 1c2:	8c bd       	out	0x2c, r24	; 44
-	SREG = (1 << 7);
- 1c4:	80 e8       	ldi	r24, 0x80	; 128
- 1c6:	8f bf       	out	0x3f, r24	; 63
- 1c8:	08 95       	ret
+ 1ae:	81 e5       	ldi	r24, 0x51	; 81
+ 1b0:	8c bd       	out	0x2c, r24	; 44
+	SREG |= (1 << 7);
+ 1b2:	8f b7       	in	r24, 0x3f	; 63
+ 1b4:	80 68       	ori	r24, 0x80	; 128
+ 1b6:	8f bf       	out	0x3f, r24	; 63
+ 1b8:	08 95       	ret
 
-000001ca <SPI_MasterTransmit>:
+000001ba <SPI_MasterTransmit>:
 }
 
 void SPI_MasterTransmit(char cData) {
 	SPDR = cData;
- 1ca:	8e bd       	out	0x2e, r24	; 46
-	
-	PORTB |= 0x10;
- 1cc:	2c 9a       	sbi	0x05, 4	; 5
-	
-	while(!(SPSR & (1 << SPIF))) {
- 1ce:	0d b4       	in	r0, 0x2d	; 45
- 1d0:	07 fe       	sbrs	r0, 7
- 1d2:	fd cf       	rjmp	.-6      	; 0x1ce <SPI_MasterTransmit+0x4>
-		;
-	}
+ 1ba:	8e bd       	out	0x2e, r24	; 46
 	
 	PORTB &= 0xEF;
- 1d4:	2c 98       	cbi	0x05, 4	; 5
- 1d6:	08 95       	ret
+ 1bc:	2c 98       	cbi	0x05, 4	; 5
+	
+	while(!(SPSR & (1 << SPIF)));
+ 1be:	0d b4       	in	r0, 0x2d	; 45
+ 1c0:	07 fe       	sbrs	r0, 7
+ 1c2:	fd cf       	rjmp	.-6      	; 0x1be <SPI_MasterTransmit+0x4>
+	
+	PORTB |= 0x10;
+ 1c4:	2c 9a       	sbi	0x05, 4	; 5
+ 1c6:	08 95       	ret
 
-000001d8 <main>:
+000001c8 <main>:
 void SPI_MasterInit(void);
 void SPI_MasterTransmit(char cData);
 
 int main(void)
 {
+	DDRA = 0xFF; PORTA = 0x00;
+ 1c8:	8f ef       	ldi	r24, 0xFF	; 255
+ 1ca:	81 b9       	out	0x01, r24	; 1
+ 1cc:	12 b8       	out	0x02, r1	; 2
+	PORTB = 0x40;
+ 1ce:	80 e4       	ldi	r24, 0x40	; 64
+ 1d0:	85 b9       	out	0x05, r24	; 5
 	TimerSet(1000);
- 1d8:	68 ee       	ldi	r22, 0xE8	; 232
- 1da:	73 e0       	ldi	r23, 0x03	; 3
- 1dc:	80 e0       	ldi	r24, 0x00	; 0
- 1de:	90 e0       	ldi	r25, 0x00	; 0
- 1e0:	73 df       	rcall	.-282    	; 0xc8 <TimerSet>
+ 1d2:	68 ee       	ldi	r22, 0xE8	; 232
+ 1d4:	73 e0       	ldi	r23, 0x03	; 3
+ 1d6:	80 e0       	ldi	r24, 0x00	; 0
+ 1d8:	90 e0       	ldi	r25, 0x00	; 0
+ 1da:	76 df       	rcall	.-276    	; 0xc8 <TimerSet>
 	TimerOn();
- 1e2:	83 df       	rcall	.-250    	; 0xea <TimerOn>
- 1e4:	10 92 09 01 	sts	0x0109, r1	; 0x800109 <LEDValue>
+ 1dc:	86 df       	rcall	.-244    	; 0xea <TimerOn>
+ 1de:	10 92 09 01 	sts	0x0109, r1	; 0x800109 <LEDValue>
 	LEDValue = 0;
 	SPI_MasterInit();
- 1e8:	e0 df       	rcall	.-64     	; 0x1aa <SPI_MasterInit>
+ 1e2:	e3 df       	rcall	.-58     	; 0x1aa <SPI_MasterInit>
     while (1) 
     {
 		SPI_MasterTransmit(LEDValue);
+ 1e4:	80 91 09 01 	lds	r24, 0x0109	; 0x800109 <LEDValue>
+ 1e8:	e8 df       	rcall	.-48     	; 0x1ba <SPI_MasterTransmit>
  1ea:	80 91 09 01 	lds	r24, 0x0109	; 0x800109 <LEDValue>
- 1ee:	ed df       	rcall	.-38     	; 0x1ca <SPI_MasterTransmit>
- 1f0:	80 91 09 01 	lds	r24, 0x0109	; 0x800109 <LEDValue>
 		
 		LEDValue++; //will go back to zero if char overflows
- 1f4:	8f 5f       	subi	r24, 0xFF	; 255
- 1f6:	80 93 09 01 	sts	0x0109, r24	; 0x800109 <LEDValue>
- 1fa:	80 91 08 01 	lds	r24, 0x0108	; 0x800108 <TimerFlag>
+ 1ee:	8f 5f       	subi	r24, 0xFF	; 255
+ 1f0:	80 93 09 01 	sts	0x0109, r24	; 0x800109 <LEDValue>
+ 1f4:	80 91 08 01 	lds	r24, 0x0108	; 0x800108 <TimerFlag>
 		while(!TimerFlag);
- 1fe:	88 23       	and	r24, r24
- 200:	e1 f3       	breq	.-8      	; 0x1fa <main+0x22>
- 202:	10 92 08 01 	sts	0x0108, r1	; 0x800108 <TimerFlag>
+ 1f8:	88 23       	and	r24, r24
+ 1fa:	e1 f3       	breq	.-8      	; 0x1f4 <main+0x2c>
+ 1fc:	10 92 08 01 	sts	0x0108, r1	; 0x800108 <TimerFlag>
 		TimerFlag = 0;
- 206:	f1 cf       	rjmp	.-30     	; 0x1ea <main+0x12>
+ 200:	f1 cf       	rjmp	.-30     	; 0x1e4 <main+0x1c>
 
-00000208 <_exit>:
+00000202 <_exit>:
     }
- 208:	f8 94       	cli
+ 202:	f8 94       	cli
 
-0000020a <__stop_program>:
- 20a:	ff cf       	rjmp	.-2      	; 0x20a <__stop_program>
+00000204 <__stop_program>:
+ 204:	ff cf       	rjmp	.-2      	; 0x204 <__stop_program>

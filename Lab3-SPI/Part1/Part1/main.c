@@ -15,6 +15,8 @@ void SPI_MasterTransmit(char cData);
 
 int main(void)
 {
+	DDRA = 0xFF; PORTA = 0x00;
+	PORTB = 0x40;
 	TimerSet(1000);
 	TimerOn();
 	LEDValue = 0;
@@ -24,17 +26,17 @@ int main(void)
 		SPI_MasterTransmit(LEDValue);
 		
 		LEDValue++; //will go back to zero if char overflows
+		if(LEDValue > 200) {
+			LEDValue = 0;
+		}
 		while(!TimerFlag);
 		TimerFlag = 0;
     }
 }
 
 void SPI_MasterInit(void) {
-	DDRA = 0xFF; PORTA = 0x00;
-	DDRB = 0xBF; PORTB = 0x40;
-	DDRC = 0x00; PORTC = 0xFF;
-	DDRB = 0x00; PORTD = 0xFF;
 	
+	DDRB =  (1 << DDB5) | (1 << DDB7) | (1 << DDB4);
 	SPCR =  (1 << SPE)|(1 << MSTR)|(1 << SPR0);
 	SREG |= (1 << 7);
 }
@@ -42,11 +44,9 @@ void SPI_MasterInit(void) {
 void SPI_MasterTransmit(char cData) {
 	SPDR = cData;
 	
-	PORTB |= 0x10;
-	
-	while(!(SPSR & (1 << SPIF))) {
-		;
-	}
-	
 	PORTB &= 0xEF;
+	
+	while(!(SPSR & (1 << SPIF)));
+	
+	PORTB |= 0x10;
 }
