@@ -8,7 +8,7 @@
 #include <avr/io.h>
 #include "timer.h"
 #include "keypad.h"
-#include "io.c"
+#include "lcd.h"
 
 static unsigned char PATTERN[6] = "Ptrn: ";
 static unsigned char SPEED[5] = "Spd: ";
@@ -81,6 +81,7 @@ int main(void)
 		upper = ((LEDData & 0xF0) >> 4);
 		lower = LEDData & 0x0F;
 		
+		LCD_ClearScreen();
 		LCD_DisplayString(1, PATTERN);
 		LCD_WriteData(upper + '0');
 		LCD_DisplayString(9, SPEED);
