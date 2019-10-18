@@ -37,7 +37,8 @@ int main(void)
 	
 	while (1)
 	{
-		keypadInput = GetKeypadKey();
+		//keypadInput = GetKeypadKey();
+		keypadInput = 0x11;
 		if(keypadInput >= '0' && keypadInput <= '9'){
 			if(keypadInput > '4' || keypadInput == '0') {
 				LEDData &= 0xF0;
