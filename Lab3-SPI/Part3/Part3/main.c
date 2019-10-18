@@ -10,9 +10,9 @@
 #include "keypad.h"
 #include "lcd.h"
 
-static unsigned char PATTERN[6] = "Ptrn: ";
-static unsigned char SPEED[5] = "Spd: ";
-static unsigned char CONTROLLER[5] = "uC: 1";
+static unsigned char PATTERN[7] = "Ptrn: ";
+static unsigned char SPEED[6] = "Spd: ";
+static unsigned char CONTROLLER[6] = "uC: 1";
 
 unsigned char LEDData;
 unsigned char keypadInput;
@@ -37,7 +37,8 @@ int main(void)
 	
 	while (1)
 	{
-		keypadInput = GetKeypadKey();
+		//keypadInput = GetKeypadKey();
+		keypadInput = 0x11;
 		if(keypadInput >= '0' && keypadInput <= '9'){
 			if(keypadInput > '4' || keypadInput == '0') {
 				LEDData &= 0xF0;
