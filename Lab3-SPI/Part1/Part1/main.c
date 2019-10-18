@@ -16,7 +16,7 @@ void SPI_MasterTransmit(char cData);
 int main(void)
 {
 	DDRA = 0xFF; PORTA = 0x00;
-	PORTB = 0x40;
+				 PORTB = 0x40;
 	TimerSet(1000);
 	TimerOn();
 	LEDValue = 0;

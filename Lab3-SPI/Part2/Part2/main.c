@@ -6,6 +6,7 @@
  */ 
 
 #include <avr/io.h>
+#include "timer.h"
 #include "keypad.h"
 
 unsigned char LEDData;
@@ -16,9 +17,15 @@ void SPI_MasterTransmit(char cData);
 
 int main(void)
 {
+	DDRA = 0xFF; PORTA = 0x00;
+				 PORTB = 0x40;
 	DDRC = 0x00; PORTC = 0xFF;
+	
+	TimerSet(10);
+	TimerOn();
+	
 	SPI_MasterInit();
-    /* Replace with your application code */
+    
     while (1) 
     {
 		keypadInput = GetKeypadKey();
@@ -40,7 +47,7 @@ int main(void)
 				else if(keypadInput == '9'){
 					LEDData |= 0x05;
 				}
-				else if(keypadInput == '0'){
+				else {//if(keypadInput == '0'){
 					LEDData |= 0x06;
 				}
 			}
@@ -55,34 +62,33 @@ int main(void)
 				else if(keypadInput == '3'){
 					LEDData |= 0x30;
 				}
-				else if(keypadInput == '4'){
+				else { //if(keypadInput == '4'){
 					LEDData |= 0x40;
 				}
+				
 			}
 		}
 		
 		SPI_MasterTransmit(LEDData);
 		
+		while(!TimerFlag);
+		TimerFlag = 0;
     }
 }
 
 void SPI_MasterInit(void) {
-	DDRA = 0xFF; PORTA = 0x00;
-	DDRB = 0xBF; PORTB = 0x40;
-	DDRD = 0x00; PORTD = 0xFF;
 	
+	DDRB =  (1 << DDB5) | (1 << DDB7) | (1 << DDB4);
 	SPCR =  (1 << SPE)|(1 << MSTR)|(1 << SPR0);
-	SREG |= (1 << 7);
+	sei();
 }
 
 void SPI_MasterTransmit(char cData) {
 	SPDR = cData;
 	
-	PORTB |= 0x10;
-	
-	while(!(SPSR & (1 << SPIF))) {
-		;
-	}
-	
 	PORTB &= 0xEF;
+	
+	while(!(SPSR & (1 << SPIF)));
+	
+	PORTB |= 0x10;
 }
