@@ -9,7 +9,6 @@
  */
 
 #include <avr/io.h>
-#include <avr/interrupt.h>
 
 #define uc unsigned char
 
@@ -19,28 +18,30 @@ void SPI_ServantInit(void);
 
 int main(void)
 {
-	DDRA = 0xFF; PORTA = 0x00;
     SPI_ServantInit();
     
 	uc select;
+    uc ledPattern;
     while (1) 
     {
 		select = ~PINB & 0x10;//Get SS
 		if(!select) {//If the Select line is low then it is selected
-			PORTA = receivedData;
-		}
+			PORTA = recivedData;
     }
 }
 
 void SPI_ServantInit(void) {
-    /* Set MISO output, all others input */
-    //DDRB = 0x40; //B4=~SS | B5=MOSI | B6=MISO | B7=SCLK
-    /* Enable SPI */
+	/* Set MISO output, all others input */
+	DDRA = 0xFF; PORTA = 0x00;//LED Output
+	DDRB = 0x40; 
+	//PORTB = 0xBF;//B4=~SS | B5=MOSI | B6=MISO | B7=SCLK
+
+	/* Enable SPI */
 	DDRB = (1<<DDB5);
-    SPCR = (1<<SPE)|(1<<7);
-	sei();
+	SPCR = (1<<SPE)|(1<<7);
 }
 
 ISR(SPI_STC_vect) {
 	receivedData = SPDR;
 }
+
