@@ -33,11 +33,11 @@ int main(void)
 }
 
 void SPI_ServantInit(void) {
-    /* Set MISO output, all others input */
-    //DDRB = 0x40; //B4=~SS | B5=MOSI | B6=MISO | B7=SCLK
-    /* Enable SPI */
+	/* Set MISO output, all others input */
+	//B4=~SS | B5=MOSI | B6=MISO | B7=SCLK
 	DDRB = (1<<DDB5);
-    SPCR = (1<<SPE)|(1<<7);
+	/* Enable SPI */
+	SPCR = (1<<SPE)|(1<<7);
 	sei();
 }
 
