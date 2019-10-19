@@ -14,7 +14,6 @@ static unsigned char PATTERN[7] = "Ptrn: ";
 static unsigned char SPEED[6] = "Spd: ";
 static unsigned char CONTROLLER[6] = "uC: 1";
 
-unsigned char LCDOutput[6] = "asdf ";
 unsigned char LEDData;
 unsigned char keypadInput;
 unsigned char upper;
@@ -44,12 +43,12 @@ int main(void)
 		if(keypadInput != '\0') {
 			switch(keypadInput) {
 				//Speeds
-				case '1': LEDData &= 0xF0; LEDData |= 0x01; break;
-				case '2': LEDData &= 0xF0; LEDData |= 0x02; break;
-				case '3': LEDData &= 0xF0; LEDData |= 0x03; break;
-				case '4': LEDData &= 0xF0; LEDData |= 0x04; break;
-				case '5': LEDData &= 0xF0; LEDData |= 0x05; break;
-				case '6': LEDData &= 0xF0; LEDData |= 0x06; break;
+				case '2': LEDData &= 0xF0; LEDData |= 0x01; break;
+				case '3': LEDData &= 0xF0; LEDData |= 0x02; break;
+				case '5': LEDData &= 0xF0; LEDData |= 0x03; break;
+				case '6': LEDData &= 0xF0; LEDData |= 0x04; break;
+				case '8': LEDData &= 0xF0; LEDData |= 0x05; break;
+				case '9': LEDData &= 0xF0; LEDData |= 0x06; break;
 				
 				//Pattern
 				case 'A': LEDData &= 0x0F; LEDData |= 0x10; break;
@@ -57,7 +56,7 @@ int main(void)
 				case 'C': LEDData &= 0x0F; LEDData |= 0x30; break;
 				case 'D': LEDData &= 0x0F; LEDData |= 0x40; break;
 				
-				default: //Nothing
+				default: break;//Nothing
 			}
 			
 			upper = ((LEDData & 0xF0) >> 4);
