@@ -88,7 +88,7 @@ int main(void)
 			LCD_WriteData(upper + '0');
 			LCD_DisplayString(9, SPEED);
 			LCD_WriteData(lower + '0');
-			LCD_DisplayString(16, CONTROLLER);
+			LCD_DisplayString(17, CONTROLLER);
 		
 			SPI_MasterTransmit(LEDData);
 		}

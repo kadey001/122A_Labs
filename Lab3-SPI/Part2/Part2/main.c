@@ -19,7 +19,7 @@ int main(void)
 {
 	DDRA = 0xFF; PORTA = 0x00;
 				 PORTB = 0x40;
-	DDRC = 0x00; PORTC = 0xFF;
+	DDRC = 0xF0; PORTC = 0x0F;
 	
 	TimerSet(500);
 	TimerOn();
