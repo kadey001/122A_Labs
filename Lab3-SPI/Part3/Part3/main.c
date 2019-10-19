@@ -44,18 +44,18 @@ int main(void)
 		if(keypadInput != '\0') {
 			switch(keypadInput) {
 				//Speeds
-				case '5': LEDData &= 0xF0; LEDData |= 0x01; break;
-				case '6': LEDData &= 0xF0; LEDData |= 0x02; break;
-				case '7': LEDData &= 0xF0; LEDData |= 0x03; break;
-				case '8': LEDData &= 0xF0; LEDData |= 0x04; break;
-				case '9': LEDData &= 0xF0; LEDData |= 0x05; break;
-				case '0': LEDData &= 0xF0; LEDData |= 0x06; break;
+				case '1': LEDData &= 0xF0; LEDData |= 0x01; break;
+				case '2': LEDData &= 0xF0; LEDData |= 0x02; break;
+				case '3': LEDData &= 0xF0; LEDData |= 0x03; break;
+				case '4': LEDData &= 0xF0; LEDData |= 0x04; break;
+				case '5': LEDData &= 0xF0; LEDData |= 0x05; break;
+				case '6': LEDData &= 0xF0; LEDData |= 0x06; break;
 				
 				//Pattern
-				case '1': LEDData &= 0x0F; LEDData |= 0x10; break;
-				case '2': LEDData &= 0x0F; LEDData |= 0x20; break;
-				case '3': LEDData &= 0x0F; LEDData |= 0x30; break;
-				case '4': LEDData &= 0x0F; LEDData |= 0x40; break;
+				case 'A': LEDData &= 0x0F; LEDData |= 0x10; break;
+				case 'B': LEDData &= 0x0F; LEDData |= 0x20; break;
+				case 'C': LEDData &= 0x0F; LEDData |= 0x30; break;
+				case 'D': LEDData &= 0x0F; LEDData |= 0x40; break;
 				
 				default: //Nothing
 			}
@@ -72,57 +72,6 @@ int main(void)
 		
 			SPI_MasterTransmit(LEDData);
 		}
-		/*if(keypadInput >= '0' && keypadInput <= '9') {
-			if(keypadInput > '4' || keypadInput == '0') {
-				LEDData &= 0xF0;
-				if(keypadInput == '5'){
-					LEDData |= 0x01;
-				}
-				else if(keypadInput == '6'){
-					LEDData |= 0x02;
-				}
-				else if(keypadInput == '7'){
-					LEDData |= 0x03;
-				}
-				else if(keypadInput == '8'){
-					LEDData |= 0x04;
-				}
-				else if(keypadInput == '9'){
-					LEDData |= 0x05;
-				}
-				else {//if(keypadInput == '0'){
-					LEDData |= 0x06;
-				}
-			}
-			else if(keypadInput <= '4') {
-				LEDData &= 0x0F; 
-				if(keypadInput == '1') {
-					LEDData |= 0x10; 
-				}
-				else if(keypadInput == '2'){
-					LEDData |= 0x20;
-				}
-				else if(keypadInput == '3'){
-					LEDData |= 0x30;
-				}
-				else { //if(keypadInput == '4'){
-					LEDData |= 0x40;
-				}
-				
-			}
-		
-			upper = ((LEDData & 0xF0) >> 4);
-			lower = LEDData & 0x0F;
-		
-			LCD_ClearScreen();
-			LCD_DisplayString(1, PATTERN);
-			LCD_WriteData(upper + '0');
-			LCD_DisplayString(9, SPEED);
-			LCD_WriteData(lower + '0');
-			LCD_DisplayString(16, CONTROLLER);
-		
-			SPI_MasterTransmit(LEDData);
-		}*/
 		
 		while(!TimerFlag);
 		TimerFlag = 0;
