@@ -21,19 +21,19 @@
 #include "task.h"
 #include "croutine.h"
 enum LEDState0 {INIT0, OFF0, ON0} led_state0;
-enum LEDState2 {INIT2, OFF2, ON4} led_state2;
+enum LEDState2 {INIT2, OFF2, ON2} led_state2;
 enum LEDState4 {INIT4, OFF4, ON4} led_state4;
 
 void LED0_Init(){
-	led0_state = INIT0;
+	led_state0 = INIT0;
 }
 
 void LED2_Init(){
-	led2_state = INIT2;
+	led_state2 = INIT2;
 }
 
 void LED4_Init(){
-	led4_state = INIT4;
+	led_state4 = INIT4;
 }
 
 void LED0_Tick(){
@@ -55,30 +55,131 @@ void LED0_Tick(){
 	//Transitions
 	switch(led_state0){
 		case INIT0:
-		led_state = OFF0;
+		led_state0 = OFF0;
 		break;
 		case OFF0:
-		led_state = ON0;
+		led_state0 = ON0;
 		break;
 		case ON0:
-		led_state = OFF0;
+		led_state0 = OFF0;
 		break;
 		default:
-		led_state = INIT;
+		led_state0 = INIT0;
 		break;
 	}
 }
 
-void LedSecTask() {
-	LEDS_Init();
+void LED2_Tick(){
+	//Actions
+	switch(led_state2){
+		case INIT2:
+		//do nothing
+		break;
+		case OFF2:
+		PORTD &= 0xFD;
+		break;
+		case ON2:
+		PORTD |= 0x02;
+		break;
+		default:
+		//do nothing
+		break;
+	}
+	//Transitions
+	switch(led_state2){
+		case INIT2:
+		led_state2 = OFF2;
+		break;
+		case OFF2:
+		led_state2 = ON2;
+		break;
+		case ON2:
+		led_state2 = OFF2;
+		break;
+		default:
+		led_state2 = INIT2;
+		break;
+	}
+}
+
+void LED4_Tick(){
+	//Actions
+	switch(led_state4){
+		case INIT4:
+		//do nothing
+		break;
+		case OFF4:
+		PORTD &= 0xFB;
+		break;
+		case ON4:
+		PORTD |= 0x04;
+		break;
+		default:
+		//do nothing
+		break;
+	}
+	//Transitions
+	switch(led_state4){
+		case INIT4:
+		led_state4 = OFF4;
+		break;
+		case OFF4:
+		led_state4 = ON4;
+		break;
+		case ON4:
+		led_state4 = OFF4;
+		break;
+		default:
+		led_state4 = INIT4;
+		break;
+	}
+}
+
+
+void Led0SecTask() {
+	LED0_Init();
 	for(;;) {
-		LEDS_Tick();
+		LED0_Tick();
+		vTaskDelay(500);
+	}
+}
+
+void Led2SecTask() {
+	LED2_Init();
+	for(;;) {
+		LED2_Tick();
 		vTaskDelay(1000);
 	}
 }
 
-void StartSecPulse(unsigned portBASE_TYPE Priority) {
-	xTaskCreate(LedSecTask,
+void Led4SecTask() {
+	LED4_Init();
+	for(;;) {
+		LED4_Tick();
+		vTaskDelay(2500);
+	}
+}
+
+void StartSecPulse0(unsigned portBASE_TYPE Priority) {
+	xTaskCreate(Led0SecTask,
+	(signed portCHAR *)"LedSecTask",
+	configMINIMAL_STACK_SIZE,
+	NULL,
+	Priority,
+	NULL );
+}
+
+void StartSecPulse2(unsigned portBASE_TYPE Priority) {
+	xTaskCreate(Led2SecTask,
+	(signed portCHAR *)"LedSecTask",
+	configMINIMAL_STACK_SIZE,
+	NULL,
+	Priority,
+	NULL );
+}
+
+void StartSecPulse4(unsigned portBASE_TYPE Priority) {
+	xTaskCreate(Led4SecTask,
 	(signed portCHAR *)"LedSecTask",
 	configMINIMAL_STACK_SIZE,
 	NULL,
@@ -90,7 +191,9 @@ int main(void) {
 	DDRA = 0x00; PORTA=0xFF;
 	DDRD = 0xFF;
 	//Start Tasks
-	StartSecPulse(1);
+	StartSecPulse0(1);
+	StartSecPulse2(2);
+	StartSecPulse4(3);
 	//RunSchedular
 	vTaskStartScheduler();
 	return 0;
