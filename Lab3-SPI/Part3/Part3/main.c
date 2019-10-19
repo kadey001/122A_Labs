@@ -41,7 +41,38 @@ int main(void)
 	while (1)
 	{
 		keypadInput = GetKeypadKey();
-		if(keypadInput >= '0' && keypadInput <= '9') {
+		if(keypadInput != '\0') {
+			switch(keypadInput) {
+				//Speeds
+				case '5': LEDData &= 0xF0; LEDData |= 0x01; break;
+				case '6': LEDData &= 0xF0; LEDData |= 0x02; break;
+				case '7': LEDData &= 0xF0; LEDData |= 0x03; break;
+				case '8': LEDData &= 0xF0; LEDData |= 0x04; break;
+				case '9': LEDData &= 0xF0; LEDData |= 0x05; break;
+				case '0': LEDData &= 0xF0; LEDData |= 0x06; break;
+				
+				//Pattern
+				case '1': LEDData &= 0x0F; LEDData |= 0x10; break;
+				case '2': LEDData &= 0x0F; LEDData |= 0x20; break;
+				case '3': LEDData &= 0x0F; LEDData |= 0x30; break;
+				case '4': LEDData &= 0x0F; LEDData |= 0x40; break;
+				
+				default: //Nothing
+			}
+			
+			upper = ((LEDData & 0xF0) >> 4);
+			lower = LEDData & 0x0F;
+		
+			LCD_ClearScreen();
+			LCD_DisplayString(1, PATTERN);
+			LCD_WriteData(upper + '0');
+			LCD_DisplayString(9, SPEED);
+			LCD_WriteData(lower + '0');
+			LCD_DisplayString(16, CONTROLLER);
+		
+			SPI_MasterTransmit(LEDData);
+		}
+		/*if(keypadInput >= '0' && keypadInput <= '9') {
 			if(keypadInput > '4' || keypadInput == '0') {
 				LEDData &= 0xF0;
 				if(keypadInput == '5'){
@@ -64,9 +95,9 @@ int main(void)
 				}
 			}
 			else if(keypadInput <= '4') {
-				LEDData &= 0x0F;
+				LEDData &= 0x0F; 
 				if(keypadInput == '1') {
-					LEDData |= 0x10;
+					LEDData |= 0x10; 
 				}
 				else if(keypadInput == '2'){
 					LEDData |= 0x20;
@@ -91,7 +122,7 @@ int main(void)
 			LCD_DisplayString(16, CONTROLLER);
 		
 			SPI_MasterTransmit(LEDData);
-		}
+		}*/
 		
 		while(!TimerFlag);
 		TimerFlag = 0;
