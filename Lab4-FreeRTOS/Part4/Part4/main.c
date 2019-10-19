@@ -21,9 +21,11 @@ void LEDS_Init(){
 }
 
 unsigned char currentLED;
+unsigned char switched;
 
 void LEDS_Tick(){
 	//Actions
+	switched = 0;
 	switch(led_state){
 		case INIT:
 			currentLED = 0x80;
@@ -66,7 +68,7 @@ unsigned char button;
 
 void buttonTick() {
 	button = ~PINA & 0x01;
-	if(button && currentLED != 0x80 && currentLED != 0x01) {
+	if(button && currentLED != 0x80 && currentLED != 0x01 && switched == 0) {
 		switch(led_state) {
 			case RIGHT: 
 				led_state = LEFT;
@@ -77,7 +79,9 @@ void buttonTick() {
 			default: 
 				break;
 		}
+		switched = 1;
 	}
+	
 }
 
 void LedSecTask() {
