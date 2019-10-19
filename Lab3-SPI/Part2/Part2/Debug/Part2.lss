@@ -15,11 +15,11 @@ Idx Name          Size      VMA       LMA       File off  Algn
                   CONTENTS, READONLY
   5 .debug_aranges 00000070  00000000  00000000  00000438  2**0
                   CONTENTS, READONLY, DEBUGGING
-  6 .debug_info   00000a7b  00000000  00000000  000004a8  2**0
+  6 .debug_info   00000a7d  00000000  00000000  000004a8  2**0
                   CONTENTS, READONLY, DEBUGGING
-  7 .debug_abbrev 000008d6  00000000  00000000  00000f23  2**0
+  7 .debug_abbrev 000008d6  00000000  00000000  00000f25  2**0
                   CONTENTS, READONLY, DEBUGGING
-  8 .debug_line   00000564  00000000  00000000  000017f9  2**0
+  8 .debug_line   00000564  00000000  00000000  000017fb  2**0
                   CONTENTS, READONLY, DEBUGGING
   9 .debug_frame  000000e4  00000000  00000000  00001d60  2**2
                   CONTENTS, READONLY, DEBUGGING
@@ -437,9 +437,9 @@ int main(void)
  26a:	17 b8       	out	0x07, r1	; 7
  26c:	88 b9       	out	0x08, r24	; 8
 	
-	TimerSet(10);
- 26e:	6a e0       	ldi	r22, 0x0A	; 10
- 270:	70 e0       	ldi	r23, 0x00	; 0
+	TimerSet(500);
+ 26e:	64 ef       	ldi	r22, 0xF4	; 244
+ 270:	71 e0       	ldi	r23, 0x01	; 1
  272:	80 e0       	ldi	r24, 0x00	; 0
  274:	90 e0       	ldi	r25, 0x00	; 0
  276:	28 df       	rcall	.-432    	; 0xc8 <TimerSet>
@@ -456,10 +456,10 @@ int main(void)
  27e:	80 93 0a 01 	sts	0x010A, r24	; 0x80010a <keypadInput>
  282:	90 ed       	ldi	r25, 0xD0	; 208
  284:	98 0f       	add	r25, r24
-		if(keypadInput >= '0' && keypadInput <= '9'){
+		if(keypadInput >= '0' && keypadInput <= '9') {
  286:	9a 30       	cpi	r25, 0x0A	; 10
  288:	08 f0       	brcs	.+2      	; 0x28c <main+0x2c>
- 28a:	42 c0       	rjmp	.+132    	; 0x310 <main+0xb0>
+ 28a:	45 c0       	rjmp	.+138    	; 0x316 <main+0xb6>
  28c:	85 33       	cpi	r24, 0x35	; 53
  28e:	18 f4       	brcc	.+6      	; 0x296 <main+0x36>
 			if(keypadInput > '4' || keypadInput == '0') {
@@ -552,11 +552,10 @@ int main(void)
 				}
 				
 			}
-		}
-		
-		SPI_MasterTransmit(LEDData);
+			SPI_MasterTransmit(LEDData);
  314:	9e df       	rcall	.-196    	; 0x252 <SPI_MasterTransmit>
  316:	80 91 08 01 	lds	r24, 0x0108	; 0x800108 <TimerFlag>
+		}
 		
 		while(!TimerFlag);
  31a:	88 23       	and	r24, r24
@@ -568,7 +567,7 @@ int main(void)
     while (1) 
     {
 		keypadInput = GetKeypadKey();
-		if(keypadInput >= '0' && keypadInput <= '9'){
+		if(keypadInput >= '0' && keypadInput <= '9') {
 			if(keypadInput > '4' || keypadInput == '0') {
 				LEDData &= 0xF0;
  328:	90 7f       	andi	r25, 0xF0	; 240

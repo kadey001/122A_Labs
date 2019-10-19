@@ -21,15 +21,16 @@ int main(void)
 				 PORTB = 0x40;
 	DDRC = 0x00; PORTC = 0xFF;
 	
-	TimerSet(10);
+	TimerSet(500);
 	TimerOn();
 	
 	SPI_MasterInit();
-    
+    LEDData = 0x11;
+	
     while (1) 
     {
 		keypadInput = GetKeypadKey();
-		if(keypadInput >= '0' && keypadInput <= '9'){
+		if(keypadInput >= '0' && keypadInput <= '9') {
 			if(keypadInput > '4' || keypadInput == '0') {
 				LEDData &= 0xF0;
 				if(keypadInput == '5'){
@@ -67,9 +68,8 @@ int main(void)
 				}
 				
 			}
+			SPI_MasterTransmit(LEDData);
 		}
-		
-		SPI_MasterTransmit(LEDData);
 		
 		while(!TimerFlag);
 		TimerFlag = 0;

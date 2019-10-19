@@ -14,10 +14,13 @@ static unsigned char PATTERN[7] = "Ptrn: ";
 static unsigned char SPEED[6] = "Spd: ";
 static unsigned char CONTROLLER[6] = "uC: 1";
 
+unsigned char LCDOutput[6] = "asdf ";
 unsigned char LEDData;
 unsigned char keypadInput;
 unsigned char upper;
 unsigned char lower;
+
+unsigned char test;
 
 void SPI_MasterInit(void);
 void SPI_MasterTransmit(char cData);
@@ -26,10 +29,10 @@ int main(void)
 {
 	DDRA = 0xFF; PORTA = 0x00;
 				 PORTB = 0x40;
-	DDRC = 0x00; PORTC = 0xFF;
+	DDRC = 0xF0; PORTC = 0x0F;
 	DDRD = 0xFF; PORTD = 0x00;
 	
-	TimerSet(10);
+	TimerSet(500);
 	TimerOn();
 	LCD_init();
 	
@@ -37,9 +40,8 @@ int main(void)
 	
 	while (1)
 	{
-		//keypadInput = GetKeypadKey();
-		keypadInput = 0x11;
-		if(keypadInput >= '0' && keypadInput <= '9'){
+		keypadInput = GetKeypadKey();
+		if(keypadInput >= '0' && keypadInput <= '9') {
 			if(keypadInput > '4' || keypadInput == '0') {
 				LEDData &= 0xF0;
 				if(keypadInput == '5'){
@@ -77,19 +79,19 @@ int main(void)
 				}
 				
 			}
+		
+			upper = ((LEDData & 0xF0) >> 4);
+			lower = LEDData & 0x0F;
+		
+			LCD_ClearScreen();
+			LCD_DisplayString(1, PATTERN);
+			LCD_WriteData(upper + '0');
+			LCD_DisplayString(9, SPEED);
+			LCD_WriteData(lower + '0');
+			LCD_DisplayString(16, CONTROLLER);
+		
+			SPI_MasterTransmit(LEDData);
 		}
-		
-		upper = ((LEDData & 0xF0) >> 4);
-		lower = LEDData & 0x0F;
-		
-		LCD_ClearScreen();
-		LCD_DisplayString(1, PATTERN);
-		LCD_WriteData(upper + '0');
-		LCD_DisplayString(9, SPEED);
-		LCD_WriteData(lower + '0');
-		LCD_DisplayString(16, CONTROLLER);
-		
-		SPI_MasterTransmit(LEDData);
 		
 		while(!TimerFlag);
 		TimerFlag = 0;
