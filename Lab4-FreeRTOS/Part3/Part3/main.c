@@ -66,7 +66,7 @@ void LedSecTask() {
     LEDS_Init();
     for(;;) { 	
         LEDS_Tick();
-        vTaskDelay(100); 
+        vTaskDelay(250); 
     } 
 }
 
