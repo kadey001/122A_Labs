@@ -55,6 +55,7 @@ void LEDS_Tick(){
 			if(currentLED == 0x80) {
 				led_state = RIGHT;
 			}
+			break;
 		default:
 			led_state = INIT;
             break;
