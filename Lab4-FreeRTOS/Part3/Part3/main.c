@@ -55,6 +55,7 @@ void LEDS_Tick(){
 			if(currentLED == 0x80) {
 				led_state = RIGHT;
 			}
+			break;
 		default:
 			led_state = INIT;
             break;
@@ -65,7 +66,7 @@ void LedSecTask() {
     LEDS_Init();
     for(;;) { 	
         LEDS_Tick();
-        vTaskDelay(100); 
+        vTaskDelay(250); 
     } 
 }
 
