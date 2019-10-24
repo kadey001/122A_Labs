@@ -1,7 +1,7 @@
 /*	Author: Kelton
  *  Partner(s) Name: Andrew Lee
  *	Lab Section: 22
- *	Assignment: Lab #5  Exercise #1
+ *	Assignment: Lab #5  Exercise #2
  *	Exercise Description: Using shift registers to increment and decrement
  *
  *	I acknowledge all content contained herein, excluding template or example
@@ -24,58 +24,118 @@
 void transmit_data(uc);
 void clear_data(void);
 
-uc shiftValue = 0x00;
-uc incrementButton;
-uc decrementButton;
+uc shiftValue;
+uc cycleState;
+uc toggleSystem;
 uc updateShiftRegister;
+uc cycleButtonUp;
+uc cycleButtonDown;
 
 //State Machines
-enum buttonState { CHECK };
+enum buttonState { CHECK, CYCLEUP, CYCLEDOWN, TOGGLE };
 
 int SMTick1(int state) {
     switch(state) {
         case CHECK:
-            incrementButton = ~PINA & 0x01;
-            decrementButton = ~PINA & 0x02;
-            if(incrementButton && decrementButton) {
-                shiftValue = 0x00;
-                updateShiftRegister = 1;
-            }
-            else if(incrementButton && shiftValue < 0xFF) {
-                shiftValue += 1;
-                updateShiftRegister = 1;
-            }
-            else if(decrementButton && shiftValue > 0x00) {
-                shiftValue -= 1;
-                updateShiftRegister = 1;
+            cycleButtonUp = ~PINA & 0x01;
+            cycleButtonDown = ~PINA & 0x02;
+            break;
+        case CYCLEUP: 
+            if(cycleState < 3) {
+                cycleState += 1;
             }
             break;
+        case CYCLEDOWN: 
+            if(cycleState > 0) {
+                cycleState -= 1;
+            }
+            break;
+        case TOGGLE: 
+            toggleSystem = !toggleSystem;
+            break;
+        default: state = CHECK;
+    }
+    switch(state) {
+        case CHECK:
+            if(cycleButtonUp && cycleButtonDown) {
+                state = TOGGLE;
+            }
+            else if(cycleButtonUp) {
+                state = CYCLEUP
+            }
+            else if(cycleButtonDown) {
+                state = CYCLEDOWN;
+            }
+            break;
+        case CYCLEUP:
+        case CYCLEDOWN:
+        case TOGGLE: state = CHECK;
+        default: state = CHECK;
     }
 }
 
-enum transmition { WAIT, TRANSMIT }
+enum transmition { OFF, CYCLE0, CYCLE1, CYCLE2 }
 
 //Transmition
 int SMTick2(int state) {
     //Action
     switch(state) {
-        case WAIT: break;
-        case TRANSMIT: transmit_data(shiftValue); break;
+        case OFF:
+            transmit_data(0x00);//Turn off all LEDs
+            break;
+        case CYCLE0: 
+            if(shiftValue < 0xFF) {
+                shiftValue = shiftValue << 1;
+            } else {
+                shiftValue = 0;
+            }
+            transmit_data(shiftValue);
+            break;
+        case CYCLE1: 
+            if(shiftValue > 0x00) {
+                shiftValue = shiftValue >> 1;
+            } else {
+                shiftValue = 0;
+            }
+            transmit_data(shiftValue);
+            break;
+        case CYCLE2: 
+            if(shiftValue == 0xF0) {
+                shiftValue = 0x0F;
+            } else {
+                shiftValue = 0xF0;
+            }
+            transmit_data(shiftValue);
+            break;
         default: //Nothing
     }
     //State
     switch(state) {
-        case WAIT:
-            if(updateShiftRegister == 1) {
-                state = TRANSMIT;
-                updateShiftRegister = 0;
+        case OFF: 
+            if(!toggleSystem) {
+                switch(cycleState) {
+                    case 0: state = CYCLE0; break;
+                    case 1: state = CYCLE1; break;
+                    case 2: state = CYCLE2; break;
+                    default: state = CYCLE0; break;
+                }
             }
             break;
-        case TRANSMIT:
-            state = WAIT;
+        case CYCLE0:
+        case CYCLE1:
+        case CYCLE2: 
+            if(toggleSystem) {
+                state = OFF;
+                break;
+            }
+            switch(cycleState) {
+                case 0: state = CYCLE0; break;
+                case 1: state = CYCLE1; break;
+                case 2: state = CYCLE2; break;
+                default: state = CYCLE0; break;
+            }
             break;
-        default: 
-            state = WAIT;
+        default: state = OFF;
     }
 }
 
