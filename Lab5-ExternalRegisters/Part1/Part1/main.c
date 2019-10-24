@@ -85,6 +85,34 @@ void transmit_data(uc data) {
 	PORTD = 0x00;
 }
 
+void transmit_data(uc short) {
+	PORTD |= SRCLR;
+	PORTD &= 0xFD;
+	short sendBit = 0x0000;
+	for(uc i = 0; i < 16; ++i) {
+		//SRCLR set to 1 allowing for data to be sent
+		//Also clears SRCLK in preparation for sending data
+		PORTD &= 0xFB;
+		//SER = next bit of data to be sent
+		sendBit = 0x01 & data;
+		//Shift data over
+		data = data >> 1;
+		//Set SRCLK = 1. Rising edge shifts next bit of data into the shift register
+		if(sendBit) {
+			PORTD |= 0x0001;
+		}
+		else {
+			PORTD &= 0x00FE;
+		}
+		
+		PORTD |= (SRCLK);
+	}
+	//Set RCLK = 1. Rising edge copies data from the "Shift" register to the "Storage" register
+	PORTD |= (SRCLR | RCLK);
+	//Clear all lines in preparation of a new transmission
+	PORTD = 0x00;
+}
+
 void clear_data() {
 	PORTD = SRCLK;
 	PORTD = RCLK;
