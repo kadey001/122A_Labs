@@ -11,6 +11,7 @@
 #include <avr/io.h>
 #include <avr/interrupt.h>
 #include "timer.h"
+#include "scheduler.h"
 
 #define uc unsigned char
 #define ul unsigned long
@@ -61,7 +62,7 @@ int SMTick1(int state) {
                 state = TOGGLE;
             }
             else if(cycleButtonUp) {
-                state = CYCLEUP
+                state = CYCLEUP;
             }
             else if(cycleButtonDown) {
                 state = CYCLEDOWN;
@@ -74,7 +75,7 @@ int SMTick1(int state) {
     }
 }
 
-enum transmition { OFF, CYCLE0, CYCLE1, CYCLE2 }
+enum transmition { OFF, CYCLE0, CYCLE1, CYCLE2 };
 
 //Transmition
 int SMTick2(int state) {
@@ -107,7 +108,7 @@ int SMTick2(int state) {
             }
             transmit_data(shiftValue);
             break;
-        default: //Nothing
+        default: break; //Nothing
     }
     //State
     switch(state) {
@@ -150,7 +151,7 @@ int main(void)
 	//ul int SMTick3_calc = 100;
 	
 	//Calculating GCD
-	GCD = findGCD(SMTick1_calc, SMTick2_calc);
+	uc GCD = findGCD(SMTick1_calc, SMTick2_calc);
 	//GCD = findGCD(GCD, SMTick3_calc);
 	
 	//Recalculate GCD periods for scheduler
@@ -201,21 +202,31 @@ int main(void)
 }
 
 void transmit_data(uc data) {
-    for(uc i = 0; i < 8; ++i) {
-        //SRCLR set to 1 allowing for data to be sent
-        //Also clears SRCLK in preparation for sending data
-        PORTB = SRCLR;
-        //SER = next bit of data to be sent
-        uc sendBit = (SRCLR | (SER & data));
-        //Shift data over
-        data = data >> 1;
-        //Set SRCLK = 1. Rising edge shifts next bit of data into the shift register
-        PORTB = (sendBit | SRCLK);
-    }
-    //Set RCLK = 1. Rising edge copies data from the "Shift" register to the "Storage" register
-	PORTB = (SRCLR | RCLK);
+	PORTD |= SRCLR;
+	PORTD &= 0xFD;
+	uc sendBit = 0x00;
+	for(uc i = 0; i < 8; ++i) {
+		//SRCLR set to 1 allowing for data to be sent
+		//Also clears SRCLK in preparation for sending data
+		PORTD &= 0xFB;
+		//SER = next bit of data to be sent
+		sendBit = 0x01 & data;
+		//Shift data over
+		data = data >> 1;
+		//Set SRCLK = 1. Rising edge shifts next bit of data into the shift register
+		if(sendBit) {
+			PORTD |= 0x01;
+		}
+		else {
+			PORTD &= 0xFE;
+		}
+		
+		PORTD |= (SRCLK);
+	}
+	//Set RCLK = 1. Rising edge copies data from the "Shift" register to the "Storage" register
+	PORTD |= (SRCLR | RCLK);
 	//Clear all lines in preparation of a new transmission
-	PORTB = 0x00;
+	PORTD = 0x00;
 }
 
 void clear_data() {

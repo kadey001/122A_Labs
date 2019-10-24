@@ -85,7 +85,7 @@ void transmit_data(uc data) {
 	PORTD = 0x00;
 }
 
-void transmit_data(uc short) {
+void transmit_data(short data) {
 	PORTD |= SRCLR;
 	PORTD &= 0xFD;
 	short sendBit = 0x0000;
