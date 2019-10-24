@@ -150,7 +150,7 @@ int main(void)
 	//ul int SMTick3_calc = 100;
 	
 	//Calculating GCD
-	GCD = findGCD(SMTick1_calc, SMTick2_calc);
+	ul GCD = findGCD(SMTick1_calc, SMTick2_calc);
 	//GCD = findGCD(GCD, SMTick3_calc);
 	
 	//Recalculate GCD periods for scheduler
