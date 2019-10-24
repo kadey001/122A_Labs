@@ -45,6 +45,11 @@ int main(void)
     }
 }
 
+// #define SER 0x01
+// #define RCLK 0x02
+// #define SRCLK 0x04
+// #define SRCLR 0x08
+
 void transmit_data(uc data) {
     for(uc i = 0; i < 8; ++i) {
         //SRCLR set to 1 allowing for data to be sent
